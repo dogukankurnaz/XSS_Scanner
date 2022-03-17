@@ -63,12 +63,14 @@ for exploit in $(cat "${list}")
         curl  -s -X GET  "${url}""${exploit}" > site.txt | echo -e "Successful Payload   : ${url}${exploit}" >> exploit.txt | cat site.txt | awk -vRS="</html>" '/<html>/{gsub(/.*<html>|\n+/,"");print;exit}' >> html_parsel.txt | cat html_parsel.txt | cut -d ' ' -f1,2,3,4 >> result.txt | sort result.txt | uniq -d > last_result.txt
 		echo -e "${BRED} [*] Successful Payload   : ${RESET} ${url}${exploit}"
 	done
-    if [ -s last_result.txt ] ; 
+
+    if grep -q "404" last_result.txt;
+    then
+        echo -e " ${WHITE}[!] XSS Vulnerability Not Found!"
+    elif [ -s last_result.txt ] ; 
     then
         echo -e "${BCYAN} [!] XSS Vulnerability Found!"
         echo -e "${BCYAN} Check $(pwd)/exploit.txt " 
-    else
-        echo -e " ${WHITE}[!] XSS Vulnerability Not Found!"
     fi
 
 rm html_parsel.txt last_result.txt result.txt site.txt
