@@ -71,6 +71,9 @@ for exploit in $(cat "${list}")
     then
         echo -e "${BCYAN} [!] XSS Vulnerability Found!"
         echo -e "${BCYAN} Check $(pwd)/exploit.txt " 
+    
+    else 
+        echo -e " ${WHITE}[!] XSS Vulnerability Not Found!"
     fi
 
 rm html_parsel.txt last_result.txt result.txt site.txt
