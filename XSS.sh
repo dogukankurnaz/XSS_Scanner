@@ -60,7 +60,7 @@ url="${1}"
 list="${2}"
 for exploit in $(cat "${list}")
 	do
-        curl  -s -X GET  "${url}""${exploit}" > site.txt | echo -e "Successful Payload   : ${url}${exploit}" >> exploit.txt | cat site.txt | awk -vRS="</html>" '/<html>/{gsub(/.*<html>|\n+/,"");print;exit}' >> html_parsel.txt | cat html_parsel.txt | cut -d ' ' -f1,2,3,4 >> result.txt | sort result.txt | uniq -d > last_result.txt
+        curl  -s -X GET  "${url}""${exploit}" > site.txt | echo -e "Successful Payload   : ${url}${exploit}" >> exploit.txt | cat site.txt |awk 'BEGIN { RS="<html>"; FS="</html>" } NF>1 { print $1; exit }' >> html_parsel.txt | cat html_parsel.txt | cut -d ' ' -f1 >> result.txt | sort result.txt | uniq -d > last_result.txt
 		echo -e "${BRED} [*] Successful Payload   : ${RESET} ${url}${exploit}"
 	done
 
@@ -77,6 +77,4 @@ for exploit in $(cat "${list}")
     fi
 
 rm html_parsel.txt last_result.txt result.txt site.txt
-
-
 
